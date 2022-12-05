@@ -2,18 +2,18 @@
 
 .leftBar {
   @include themify($themes) {
-    flex: 2;
+    flex: 3;
     position: sticky;
     top: 70px;
-    min-width: 160px;
+    // min-width: 300px;
     height: calc(100vh - 70px);
     overflow: scroll;
     background-color: themed("bgSoft");
     color: themed("textColor");
 
-    @media (max-width:900px) {
-      flex: 2;
-    }
+    // @media (max-width:900px) {
+    //   flex: 2;
+    // }
 
     @include mobile {
       display: none;

@@ -15,7 +15,7 @@ type User = {
   name: string;
   username: string;
   email: string | null;
-  profilPic: string | null;
+  profilePic: string | null;
   coverPic: string | null;
   city: string | null;
   website: string | null;
@@ -25,15 +25,28 @@ type User = {
 };
 
 type PostBody = {
-  name: string;
-  userId: number;
-  img?: string;
+  desc: string | null;
+  img?: string | FormData | null;
 };
 
 interface Post extends PostBody {
   id: number;
+  userId: number;
   username: string;
-  desc: string;
+  name: string;
   profilePic: string | null;
   createdAt: Date;
+}
+
+type CommentBody = {
+  desc: string;
+  postId: number;
+};
+
+interface Comment extends CommentBody {
+  profilePic: string;
+  name: string;
+  createdAt: Date;
+  userId: number;
+  id: number;
 }

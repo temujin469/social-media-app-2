@@ -7,6 +7,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
 import { useState } from "react";
+import moment from "moment";
 
 
 type Props = {
@@ -23,7 +24,7 @@ const Post = ({ post }: Props) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={post.profilePic as string} alt="" />
+            <img src={post.profilePic ? `./upload/${post.profilePic}` : "./upload/blank-profile-picture.webp"} alt="нүүр зураг" />
             <div className="details">
               <Link
                 to={`/profile/${post.userId}`}
@@ -31,14 +32,14 @@ const Post = ({ post }: Props) => {
               >
                 <span className="name">{post.name}</span>
               </Link>
-              <span className="date">1 min ago</span>
+              <span className="date">{moment(post.createdAt).format("l")}</span>
             </div>
           </div>
           <MoreHorizIcon />
         </div>
         <div className="content">
           <p>{post.desc}</p>
-          <img src={post.img} alt="" />
+          {post.img && <img src={`./upload/${post.img}`} alt="" />}
         </div>
         <div className="info">
           <div className="item">
@@ -62,7 +63,7 @@ const Post = ({ post }: Props) => {
             </div>
           </div>
         </div>
-        {commentOpen && <Comments />}
+        {commentOpen && <Comments postId={post.id} />}
       </div>
     </div>
   );

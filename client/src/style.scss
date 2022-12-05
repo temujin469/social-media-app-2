@@ -21,6 +21,7 @@ body {
 
 .main {
   overflow: hidden;
+  flex: 6;
 }
 
 
@@ -29,6 +30,7 @@ body {
   @each $theme,
   $map in $themes {
     .theme-#{$theme} & {
+      $theme-map: () !global;
 
       @each $key,
       $submap in $map {

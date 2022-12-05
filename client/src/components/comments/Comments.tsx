@@ -1,45 +1,54 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "./comments.scss";
 import { AuthContext } from "../../context/authContext";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { addComment, getComments } from "../../api/comments";
+import moment from "moment";
+moment.locale('mn')
 
-const Comments = () => {
-  const AuthCtx = useContext(AuthContext);
+type Props = {
+  postId: number
+}
 
-  const comments = [
-    {
-      id: 1,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-      name: "John Doe",
-      userId: 1,
-      profilePicture:
-        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id: 2,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-      name: "Jane Doe",
-      userId: 2,
-      profilePicture:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    },
-  ];
+const Comments = ({ postId }: Props) => {
+  const [desc, setDesc] = useState<null | string>(null);
+
+  const { currentUser } = useContext(AuthContext);
+
+  const { error, isLoading, data: comments } = useQuery(["comments"], () => getComments(postId));
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(addComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["comments"])
+    }
+  })
+
+  const handleClick = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutation.mutate({ desc: desc!, postId })
+  }
   return (
     <div className="comments">
       <div className="write">
-        <img src={"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="" />
-        <input type="text" placeholder="write a comment" />
-        <button>Send</button>
+        <img src={`./upload/${currentUser?.profilePic}`} alt="нүүр зураг" />
+        <input type="text" placeholder="сэтгэгдэл бичих" value={desc!} onChange={(e) => setDesc(e.target.value)} />
+        <button onClick={handleClick} disabled={!desc}>Илгээх</button>
       </div>
-      {comments.map((comment) => (
-        <div className="comment">
-          <img src={comment.profilePicture} alt="" />
-          <div className="info">
-            <span>{comment.name}</span>
-            <p>{comment.desc}</p>
-          </div>
-          <span className="date">1 hour ago</span>
-        </div>
-      ))}
+      {
+
+        isLoading ? "Хайж байн" :
+          comments?.map((comment) => (
+            <div className="comment">
+              <img src={`./upload/${currentUser?.profilePic}`} alt="" />
+              <div className="info">
+                <span>{comment.name}</span>
+                <p>{comment.desc}</p>
+              </div>
+              <span className="date">{moment(comment.createdAt).startOf('day').fromNow()}</span>
+            </div>
+          ))}
     </div>
   );
 };

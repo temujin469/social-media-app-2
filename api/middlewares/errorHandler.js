@@ -14,6 +14,6 @@ export default (err, req, res, next) => {
 
   return res.status(err.statusCode || 500).json({
     success: false,
-    error: err.message || "Дотоод серверийн алдаа",
+    message: err.message || "Дотоод серверийн алдаа",
   });
 };

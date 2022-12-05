@@ -46,7 +46,7 @@ export const register = (req, res, next) => {
       }
       return res
         .status(StatusCodes.CREATED)
-        .json("Хэрэглэгчийг амжилттай бүртэглээ");
+        .json({ success: true, message: "Хэрэглэгчийг амжилттай бүртэглээ" });
     });
   });
 };
@@ -54,7 +54,8 @@ export const register = (req, res, next) => {
 //=============== LOGIN=================//
 export const login = (req, res, next) => {
   // hereglegch ali hediin bvrtgvvlsen eshiig shalgah
-  const query = "SELECT * FROM users WHERE username = ?";
+  const query =
+    "SELECT *,u.id AS id FROM users AS u LEFT JOIN userInfo AS i ON (u.id = i.userId) WHERE username = ?";
 
   db.query(query, [req.body.username], async (err, data) => {
     if (err) {
@@ -83,12 +84,14 @@ export const login = (req, res, next) => {
 
     const { password, ...others } = data[0];
 
-    return res.status(StatusCodes.OK).json(others);
+    return res
+      .status(StatusCodes.OK)
+      .json({ success: true, data: others, message: "amjilttai newterlee" });
   });
 };
 export const logout = (req, res, next) => {
   return res
     .clearCookie("accessToken", { secure: true, sameSite: "none" })
     .status(StatusCodes.OK)
-    .json("Logout");
+    .json({ message: "Logout", success: true });
 };

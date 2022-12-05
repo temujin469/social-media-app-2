@@ -10,10 +10,10 @@ const app = express();
 // import routes
 import authRoutes from "./routes/auth.js";
 import postsRoutes from "./routes/posts.js";
+import uploadRoutes from "./routes/upload.js";
 // import usersRoutes from "./routes/users";
 // import likesRoutes from "./routes/likes";
-// import commentsRoutes from "./routes/comments";
-// import postsRoutes from "./routes/posts";
+import commentsRoutes from "./routes/comments.js";
 
 // import middlewares
 import errorHandler from "./middlewares/errorHandler.js";
@@ -35,11 +35,12 @@ app.use(
 app.use(cookieParser());
 app.use(logger);
 
+app.use("/api/v1/upload", uploadRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/posts", authenticateUser, postsRoutes);
 // app.use("/api/v1/users", usersRoutes);
 // app.use("/api/v1/likes", likesRoutes);
-// app.use("/api/v1/comments", commentsRoutes);
+app.use("/api/v1/comments", commentsRoutes);
 
 app.use(errorHandler);
 

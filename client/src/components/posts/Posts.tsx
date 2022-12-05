@@ -6,8 +6,7 @@ import "./posts.scss";
 
 const Posts = () => {
 
-  const { isLoading, error, data: posts } = useQuery(['posts'], getPosts);
-  console.log(posts)
+  const { isLoading, error, data: posts } = useQuery<Post[]>(['posts'], getPosts);
 
   return <div className="posts">
     {

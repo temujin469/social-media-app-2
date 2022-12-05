@@ -23,7 +23,7 @@ export const AuthContextProvider = ({ children }: { children: JSX.Element }) => 
     const response = await api.post("/auth/login", inputs, {
       withCredentials: true,
     });
-    setCurrentUser(response.data);
+    setCurrentUser(response.data.data);
   };
 
   useEffect(() => {

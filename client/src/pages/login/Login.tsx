@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import catchResponseMessage from "../../utils/catchResponse";
 import catchError from "../../utils/cathError";
 import "./login.scss";
 
